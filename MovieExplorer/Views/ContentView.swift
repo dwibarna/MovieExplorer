@@ -8,16 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = MovieViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List(viewModel.movies) { movie in
+                VStack(alignment: .leading) {
+                    Text(movie.title)
+                        .font(.headline)
+                    Text(movie.overview)
+                        .font(.subheadline)
+                        .lineLimit(3)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.vertical, 4)
+            }
+            .navigationTitle("Film Populer")
+            .onAppear {
+                viewModel.fetchMovies()
+            }
         }
-        .padding()
     }
 }
+
 
 #Preview {
     ContentView()
