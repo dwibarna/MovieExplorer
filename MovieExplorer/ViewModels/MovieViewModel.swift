@@ -13,7 +13,7 @@ class MovieViewModel: ObservableObject {
     let apiKey: String = APIKey.tmdb
     
     func fetchMovies() {
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)&language=en-US&page=1") else {
+        guard let url = URL(string: "\(APIConfig.baseURL)/movie/popular?api_key=\(apiKey)&language=en-US&page=1") else {
             print("❌ URL invalid")
             return
         }

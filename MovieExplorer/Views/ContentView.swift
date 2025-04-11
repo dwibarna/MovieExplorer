@@ -13,24 +13,19 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List(viewModel.movies) { movie in
-                VStack(alignment: .leading) {
-                    Text(movie.title)
-                        .font(.headline)
-                    Text(movie.overview)
-                        .font(.subheadline)
-                        .lineLimit(3)
-                        .foregroundColor(.secondary)
+                NavigationLink(destination: MovieDetailView(movie: movie)) {
+                    MovieRowView(movie: movie)
                 }
-                .padding(.vertical, 4)
             }
+            .listStyle(.plain)
             .navigationTitle("Film Populer")
-            .onAppear {
-                viewModel.fetchMovies()
-            }
+        }
+        .onAppear {
+            print("📡 Fetching movie...")
+            viewModel.fetchMovies()
         }
     }
 }
-
 
 #Preview {
     ContentView()
