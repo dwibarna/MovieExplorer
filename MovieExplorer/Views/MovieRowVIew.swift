@@ -9,9 +9,11 @@ import SwiftUI
 
 struct MovieRowView: View {
     let movie: Movie
+    @ObservedObject var viewModel: MovieViewModel
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
+            // Poster
             if let path = movie.posterPath,
                let url = URL(string: "\(APIConfig.imageBaseURL)\(path)") {
                 AsyncImage(url: url) { phase in
@@ -38,8 +40,19 @@ struct MovieRowView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(movie.title)
-                    .font(.headline)
+                HStack(alignment: .top) {
+                    Text(movie.title)
+                        .font(.headline)
+                        .multilineTextAlignment(.leading)
+
+                    Spacer()
+
+                    Image(systemName: viewModel.bookmarkedMovieIDs.contains(movie.id) ? "star.fill" : "star")
+                        .foregroundColor(.yellow)
+                        .onTapGesture {
+                            viewModel.toogleBookmark(for: movie)
+                        }
+                }
 
                 Text(movie.overview)
                     .font(.subheadline)
@@ -50,3 +63,6 @@ struct MovieRowView: View {
         .padding(.vertical, 6)
     }
 }
+
+
+

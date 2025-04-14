@@ -9,8 +9,29 @@ import Foundation
 
 class MovieViewModel: ObservableObject {
     @Published var movies: [Movie] = []
+    @Published var bookmarkedMovieIDs: Set<Int> = []
     
     let apiKey: String = APIKey.tmdb
+    
+    func toogleBookmark(for movie: Movie) {
+        if bookmarkedMovieIDs.contains(movie.id) {
+            bookmarkedMovieIDs.remove(movie.id)
+        } else {
+            bookmarkedMovieIDs.insert(movie.id)
+        }
+        
+        saveBookmarks()
+    }
+    
+    private func saveBookmarks() {
+        let array = Array(bookmarkedMovieIDs)
+        UserDefaults.standard.set(array, forKey: "bookmarks")
+    }
+    
+    func loadBookmarks() {
+        let array = UserDefaults.standard.array(forKey: "bookmarks") as? [Int] ?? []
+        bookmarkedMovieIDs = Set(array)
+    }
     
     func fetchMovies() {
         guard let url = URL(string: "\(APIConfig.baseURL)/movie/popular?api_key=\(apiKey)&language=en-US&page=1") else {
